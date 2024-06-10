@@ -1,15 +1,12 @@
 package com.blogsApp.Blogs_spring_boot.exception;
-
-
-
 public class ResourceNotFoundException extends RuntimeException{
 
 
     private String resourceName;
     private String fieldName;
-    private String fieldValue;
+    private long fieldValue;
 
-    public ResourceNotFoundException(String resourceName, String fieldName, String fieldValue) {
+    public ResourceNotFoundException(String resourceName, String fieldName, long fieldValue) {
 //        eg: Post not found with id
         super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
         this.resourceName = resourceName;
@@ -25,7 +22,7 @@ public class ResourceNotFoundException extends RuntimeException{
         return fieldName;
     }
 
-    public String getFieldValue() {
+    public long getFieldValue() {
         return fieldValue;
     }
 }
