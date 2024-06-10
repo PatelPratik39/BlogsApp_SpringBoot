@@ -13,7 +13,7 @@ public interface PostService  {
 
 //    getAll Posts
 //    List<PostDto> getAllPosts(int pageNo, int pageSize);
-    PostResponse getAllPosts(int pageNo, int pageSize);
+    PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir);
 
 //    Get a Post by Id
     PostDto getPostById(long id);
