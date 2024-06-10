@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +24,14 @@ public class Post {
     private String description;
     @Column(name = "content", nullable = false)
     private String content;
+
+
+    /*
+     I am using "Set<> generics" instead of "List<> generics" because Set does not allow duplicate values and List allows duplicate records
+     Also, I am mapping Post table to comment table so i need to use @OneToMany relation and cascade Type. ALl
+     */
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
+
 }
