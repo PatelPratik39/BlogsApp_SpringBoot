@@ -3,13 +3,16 @@ package com.blogsApp.Blogs_spring_boot.service.Impl;
 import com.blogsApp.Blogs_spring_boot.entity.Post;
 import com.blogsApp.Blogs_spring_boot.exception.ResourceNotFoundException;
 import com.blogsApp.Blogs_spring_boot.payload.PostDto;
+import com.blogsApp.Blogs_spring_boot.payload.PostResponse;
 import com.blogsApp.Blogs_spring_boot.repository.PostRepository;
 import com.blogsApp.Blogs_spring_boot.service.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,11 +43,29 @@ public class PostServiceImpl implements PostService {
         return postResponse;
     }
 
+//     include page number and page size
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> posts =  postRepository.findAll();
-        return posts.stream().map(post ->  mapToDTO(post)).collect(Collectors.toList());
+    public PostResponse getAllPosts(int pageNo, int pageSize) {
+        // Create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
+        // Fetch paginated posts
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        // Get content for pageObject
+        List<Post> listOfPosts = posts.getContent();
+
+        // Map to DTO
+        List<PostDto> content = listOfPosts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(content);
+        postResponse.setPageNo(posts.getNumber());
+        postResponse.setPageSize(posts.getSize());
+        postResponse.setTotalElements(posts.getTotalElements());
+        postResponse.setTotalPages(posts.getTotalPages());
+        postResponse.setLast(posts.isLast());
+
+        return  postResponse;
     }
 
     @Override
